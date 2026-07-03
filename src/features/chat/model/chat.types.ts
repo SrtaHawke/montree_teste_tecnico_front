@@ -11,3 +11,11 @@ export interface CreateMessageDTO {
     author: string;
     text: string;
 }
+
+export interface ChatDatabase {
+    [channelId: string]: ChatMessage[];
+}
+
+export interface IncomingMessageDatabase {
+    [channelId: string]: Omit<ChatMessage, "id" | "createdAt">[];
+}

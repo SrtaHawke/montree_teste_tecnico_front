@@ -1,19 +1,33 @@
 import { delay } from "../../../shared/utils/delay";
 import { createMessageId } from "../../../shared/utils/createMessageId";
-import { INITIAL_MESSAGES, INCOMING_MESSAGES } from "../model/chat.constants";
+import { MOCK_API_DELAY } from "../model/chat.constants";
+import {
+    CHANNEL_INCOMING_MESSAGES,
+    CHANNEL_MESSAGES,
+} from "../model/chat.messages";
 import { ChatMessage, CreateMessageDTO } from "../model/chat.types";
 
-let messages: ChatMessage[] = [...INITIAL_MESSAGES];
-let incomingIndex = 0;
+let messagesDatabase: Record<string, ChatMessage[]> = { ...CHANNEL_MESSAGES };
+
+let incomingIndexes: Record<string, number> = {
+    games: 0,
+    work: 0,
+    family: 0,
+    friends: 0,
+};
 
 export const chatMockService = {
-    async getMessages(): Promise<ChatMessage[]> {
-        await delay(300);
-        return [...messages];
+    async getMessages(channelId: string): Promise<ChatMessage[]> {
+        await delay(MOCK_API_DELAY);
+
+        return [...(messagesDatabase[channelId] ?? [])];
     },
 
-    async createMessage(payload: CreateMessageDTO): Promise<ChatMessage> {
-        await delay(300);
+    async createMessage(
+        channelId: string,
+        payload: CreateMessageDTO
+    ): Promise<ChatMessage> {
+        await delay(MOCK_API_DELAY);
 
         const newMessage: ChatMessage = {
             id: createMessageId(),
@@ -22,19 +36,29 @@ export const chatMockService = {
             createdAt: new Date(),
         };
 
-        messages = [...messages, newMessage];
+        messagesDatabase[channelId] = [
+            ...(messagesDatabase[channelId] ?? []),
+            newMessage,
+        ];
 
         return newMessage;
     },
 
-    async getNextIncomingMessage(): Promise<ChatMessage> {
-        await delay(300);
+    async getNextIncomingMessage(channelId: string): Promise<ChatMessage> {
+        await delay(MOCK_API_DELAY);
 
-        if (incomingIndex >= INCOMING_MESSAGES.length) {
-            incomingIndex = 0;
+        const incomingMessages = CHANNEL_INCOMING_MESSAGES[channelId] ?? [];
+
+        if (!incomingMessages.length) {
+            throw new Error("Nenhuma mensagem simulada disponível para este canal.");
         }
 
-        const incoming = INCOMING_MESSAGES[incomingIndex++];
+        const currentIndex = incomingIndexes[channelId] ?? 0;
+
+        const incoming = incomingMessages[currentIndex];
+
+        incomingIndexes[channelId] =
+            currentIndex + 1 >= incomingMessages.length ? 0 : currentIndex + 1;
 
         const newMessage: ChatMessage = {
             id: createMessageId(),
@@ -43,7 +67,10 @@ export const chatMockService = {
             createdAt: new Date(),
         };
 
-        messages = [...messages, newMessage];
+        messagesDatabase[channelId] = [
+            ...(messagesDatabase[channelId] ?? []),
+            newMessage,
+        ];
 
         return newMessage;
     },

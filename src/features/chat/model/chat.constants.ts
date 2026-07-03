@@ -1,39 +1,5 @@
-import { ChatMessage } from "./chat.types";
-
 export const CURRENT_USER = "Você";
-
-export const INITIAL_MESSAGES: ChatMessage[] = [
-    {
-        id: 1,
-        author: "João",
-        text: "Olá, pessoal!",
-        createdAt: new Date(),
-    },
-    {
-        id: 2,
-        author: "Maria",
-        text: "Oi, João! Tudo bem?",
-        createdAt: new Date(),
-    },
-    {
-        id: 3,
-        author: "João",
-        text: "Tudo ótimo! E com você?",
-        createdAt: new Date(),
-    },
-];
-
-export const INCOMING_MESSAGES: Omit<ChatMessage, "id" | "createdAt">[] = [
-    {
-        author: "Ana",
-        text: "Que legal esse chat!",
-    },
-    {
-        author: "Pedro",
-        text: "A interface ficou bem limpa.",
-    },
-    {
-        author: "Maria",
-        text: "Gostei da experiência!",
-    },
-];
+export const CHAT_STORAGE_KEY = "mini-chat-preferences";
+export const MOCK_API_DELAY = 300;
+export const INCOMING_MESSAGE_INTERVAL = 5000;
+export const MAX_MESSAGE_LENGTH = 500;

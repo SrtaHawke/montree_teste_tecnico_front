@@ -1,5 +1,6 @@
-import { FormEvent } from "react";
+import { FormEvent, KeyboardEvent } from "react";
 import styled from "styled-components";
+import { SendHorizontal } from "lucide-react";
 
 interface ChatComposerProps {
     value: string;
@@ -21,19 +22,26 @@ export function ChatComposer({
         onSend();
     }
 
+    function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            onSend();
+        }
+    }
+
     return (
         <ComposerForm onSubmit={handleSubmit}>
-            <InputWrapper>
-                <Input
-                    value={value}
-                    disabled={disabled}
-                    placeholder="Digite sua mensagem..."
-                    onChange={(event) => onChange(event.target.value)}
-                />
-            </InputWrapper>
+            <Input
+                value={value}
+                disabled={disabled}
+                placeholder="Digite sua mensagem..."
+                maxLength={500}
+                onChange={(event) => onChange(event.target.value)}
+                onKeyDown={handleKeyDown}
+            />
 
-            <SendButton type="submit" disabled={!canSend}>
-                Enviar
+            <SendButton type="submit" disabled={!canSend} aria-label="Enviar mensagem">
+                <SendHorizontal size={20} />
             </SendButton>
         </ComposerForm>
     );
@@ -48,40 +56,36 @@ const ComposerForm = styled.form`
   background: ${({ theme }) => theme.colors.surface};
 `;
 
-const InputWrapper = styled.div`
-  flex: 1;
-`;
-
 const Input = styled.input`
-  width: 100%;
-  height: 48px;
-  padding: 0 ${({ theme }) => theme.spacing.lg};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.full};
-  outline: none;
-  background: ${({ theme }) => theme.colors.surfaceSoft};
-  box-shadow: ${({ theme }) => theme.shadow.input};
-  transition: border-color 0.2s ease, background 0.2s ease;
-
-  &:focus {
+    flex: 1;
+    height: 48px;
+    padding: 0 ${({ theme }) => theme.spacing.lg};
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.radius.full};
+    outline: none;
+    background: ${({ theme }) => theme.colors.surfaceSoft};
+    box-shadow: ${({ theme }) => theme.shadow.input};
+    transition: 0.2s ease;
+    color:${({theme})=>theme.colors.text};
+    &::placeholder{
+        color:${({theme})=>theme.colors.muted};
+    }
+    &:focus {
     border-color: ${({ theme }) => theme.colors.primary};
     background: ${({ theme }) => theme.colors.surface};
-  }
-
-  &:disabled {
-    opacity: 0.7;
-  }
+    }
 `;
 
 const SendButton = styled.button`
+  width: 48px;
   height: 48px;
-  padding: 0 ${({ theme }) => theme.spacing.lg};
+  display: grid;
+  place-items: center;
   border-radius: ${({ theme }) => theme.radius.full};
   background: ${({ theme }) => theme.colors.sentBubble};
   color: white;
-  font-weight: 700;
   box-shadow: ${({ theme }) => theme.shadow.input};
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: 0.2s ease;
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
