@@ -32,9 +32,14 @@ export function ChatContent({ viewModel }: ChatContentProps) {
 }
 
 const Container = styled.section`
-    display:flex;
-    flex-direction:column;
-    min-width:0;
-    min-height:0;
-    overflow:hidden;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    background: ${({ theme }) => theme.colors.surface};
+
+    @media (max-width: 768px) {
+        padding-bottom: 72px;
+    }
 `;

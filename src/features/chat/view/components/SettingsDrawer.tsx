@@ -95,12 +95,23 @@ export function SettingsDrawer({
 }
 
 const Container = styled.aside<{ $open: boolean }>`
-  width: ${({ $open }) => ($open ? "320px" : "0")};
-  overflow: hidden;
-  transition: width 0.25s ease;
-  border-left: ${({ $open, theme }) =>
-    $open ? `1px solid ${theme.colors.border}` : "0"};
-  background: ${({ theme }) => theme.colors.surface};
+    width: 340px;
+    overflow: hidden;
+    border-left: 1px solid ${({ theme }) => theme.colors.border};
+    background: ${({ theme }) => theme.colors.surface};
+
+    @media (max-width: 768px) {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 72px;
+        z-index: 30;
+
+        width: min(88vw, 340px);
+        transform: translateX(${({ $open }) => ($open ? "0" : "100%")});
+        transition: transform 0.25s ease;
+        box-shadow: -20px 0 40px rgba(0, 0, 0, 0.35);
+    }
 `;
 
 const Content = styled.div`

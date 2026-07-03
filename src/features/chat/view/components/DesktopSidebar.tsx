@@ -4,19 +4,19 @@ import styled from "styled-components";
 import { ChatChannel } from "../../model/chat.channels";
 import { SidebarItem } from "./SidebarItem";
 
-interface ChatSidebarProps {
+interface DesktopSidebarProps {
     channels: ChatChannel[];
     selectedChannel: ChatChannel;
     onSelect: (channel: ChatChannel) => void;
     onOpenSettings: () => void;
 }
 
-export function ChatSidebar({
-                                channels,
-                                selectedChannel,
-                                onSelect,
-                                onOpenSettings,
-                            }: ChatSidebarProps) {
+export function DesktopSidebar({
+                                   channels,
+                                   selectedChannel,
+                                   onSelect,
+                                   onOpenSettings,
+                               }: DesktopSidebarProps) {
     return (
         <Container>
             <Top>
@@ -51,6 +51,10 @@ const Container = styled.aside`
   justify-content: space-between;
   padding: 18px 0;
   background: #1e1f22;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Top = styled.div`

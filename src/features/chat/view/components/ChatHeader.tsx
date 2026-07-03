@@ -100,9 +100,13 @@ const Subtitle = styled.span`
 `;
 
 const Actions = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
+    display: flex;
+    align-items: center;
+    gap: ${({ theme }) => theme.spacing.sm};
+
+    @media (max-width: 640px) {
+        display: none;
+    }
 `;
 
 const IconButton = styled.button`
