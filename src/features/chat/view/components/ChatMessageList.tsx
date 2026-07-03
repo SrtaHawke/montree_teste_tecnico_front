@@ -25,6 +25,14 @@ export function ChatMessageList({
         return <StateContainer>Carregando mensagens...</StateContainer>;
     }
 
+    if (!messages.length) {
+        return (
+            <StateContainer>
+                Nenhuma mensagem por aqui ainda.
+            </StateContainer>
+        );
+    }
+
     return (
         <ListContainer ref={listRef}>
             {messages.map((message) => (
@@ -38,16 +46,32 @@ export function ChatMessageList({
 
 const ListContainer = styled.div`
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.sm};
-  padding: ${({ theme }) => theme.spacing.md};
+  gap: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.lg};
   overflow-y: auto;
+  background: ${({ theme }) => theme.colors.surfaceSoft};
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: ${({ theme }) => theme.radius.full};
+    background: ${({ theme }) => theme.colors.border};
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 `;
 
 const StateContainer = styled.div`
   flex: 1;
   display: grid;
   place-items: center;
+  background: ${({ theme }) => theme.colors.surfaceSoft};
   color: ${({ theme }) => theme.colors.muted};
 `;

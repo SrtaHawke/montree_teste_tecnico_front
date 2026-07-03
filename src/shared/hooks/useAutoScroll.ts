@@ -1,8 +1,9 @@
-import { RefObject, useEffect } from "react";
+import { DependencyList, RefObject, useEffect } from "react";
 
 export function useAutoScroll(
-    ref: RefObject<HTMLElement | null>,
-    dependencies: unknown[] = []
+    ref: RefObject<HTMLElement>,
+    dependencies: DependencyList = [],
+    behavior: ScrollBehavior = "smooth"
 ) {
     useEffect(() => {
         const element = ref.current;
@@ -11,7 +12,7 @@ export function useAutoScroll(
 
         element.scrollTo({
             top: element.scrollHeight,
-            behavior: "smooth",
+            behavior,
         });
-    }, dependencies);
+    }, [ref, behavior, ...dependencies]);
 }

@@ -1,5 +1,5 @@
-export function delay(milliseconds = 300): Promise<void> {
+export function delay(ms: number): Promise<void> {
     return new Promise((resolve) => {
-        window.setTimeout(resolve, milliseconds);
+        window.setTimeout(resolve, ms);
     });
 }

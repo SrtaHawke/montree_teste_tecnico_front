@@ -1,21 +1,49 @@
 import styled from "styled-components";
+import {
+    Bell,
+    Search,
+    Settings,
+    Users,
+} from "lucide-react";
 
-export function ChatHeader() {
+import { ChatChannel } from "../../model/chat.channels";
+
+interface ChatHeaderProps {
+    channel: ChatChannel;
+}
+
+export function ChatHeader({ channel }: ChatHeaderProps) {
+    const ChannelIcon = channel.icon;
+
     return (
         <Header>
             <Profile>
-                <Avatar>💬</Avatar>
+                <Avatar>
+                    <ChannelIcon size={22} strokeWidth={2.2} />
+                </Avatar>
 
-                <div>
-                    <Title>Mini Chat</Title>
-                    <Subtitle>Conversa em tempo real simulada</Subtitle>
-                </div>
+                <Information>
+                    <Title>{channel.name}</Title>
+
+                    <Subtitle>
+                        {channel.description} • {channel.members} membros
+                    </Subtitle>
+                </Information>
             </Profile>
 
-            <Status>
-                <StatusDot />
-                Online
-            </Status>
+            <Actions>
+                <IconButton>
+                    <Search size={18} />
+                </IconButton>
+
+                <IconButton>
+                    <Bell size={18} />
+                </IconButton>
+
+                <IconButton>
+                    <Users size={18} />
+                </IconButton>
+            </Actions>
         </Header>
     );
 }
@@ -26,7 +54,7 @@ const Header = styled.header`
   justify-content: space-between;
   padding: ${({ theme }) => theme.spacing.lg};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  background: rgba(255, 255, 255, 0.9);
+  background: ${({ theme }) => theme.colors.surface};
 `;
 
 const Profile = styled.div`
@@ -36,38 +64,58 @@ const Profile = styled.div`
 `;
 
 const Avatar = styled.div`
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   border-radius: ${({ theme }) => theme.radius.full};
-  background: ${({ theme }) => theme.colors.primaryLight};
-  font-size: 22px;
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.colors.primary},
+    ${({ theme }) => theme.colors.primaryDark}
+  );
+
+  color: white;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28);
+`;
+
+const Information = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const Title = styled.h1`
   font-size: 22px;
-  line-height: 1.1;
-`;
-
-const Subtitle = styled.p`
-  margin-top: 6px;
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.muted};
-`;
-
-const Status = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: ${({ theme }) => theme.colors.online};
-  font-size: 13px;
   font-weight: 700;
 `;
 
-const StatusDot = styled.span`
-  width: 8px;
-  height: 8px;
+const Subtitle = styled.span`
+  margin-top: 4px;
+
+  color: ${({ theme }) => theme.colors.muted};
+
+  font-size: 14px;
+`;
+
+const Actions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+const IconButton = styled.button`
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: ${({ theme }) => theme.radius.full};
-  background: ${({ theme }) => theme.colors.online};
+  color: ${({ theme }) => theme.colors.muted};
+  transition: all 0.2s ease;
+  &:hover {
+    background: ${({ theme }) => theme.colors.surfaceSoft};
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `;

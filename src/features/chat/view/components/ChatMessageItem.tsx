@@ -17,14 +17,23 @@ export function ChatMessageItem({ message }: ChatMessageItemProps) {
 
     return (
         <MessageRow $isCurrentUser={isCurrentUser}>
-            <MessageBubble $isCurrentUser={isCurrentUser}>
+            {!isCurrentUser && (
+                <Avatar>
+                    {message.author.charAt(0).toUpperCase()}
+                </Avatar>
+            )}
+
+            <MessageContent $isCurrentUser={isCurrentUser}>
                 <MessageMeta $isCurrentUser={isCurrentUser}>
-                    <strong>{isCurrentUser ? "Você" : message.author}</strong>
-                    <span>{time}</span>
+                    <Author>{isCurrentUser ? "Você" : message.author}</Author>
+
+                    <Time>{time}</Time>
                 </MessageMeta>
 
-                <Text>{message.text}</Text>
-            </MessageBubble>
+                <MessageBubble $isCurrentUser={isCurrentUser}>
+                    <Text>{message.text}</Text>
+                </MessageBubble>
+            </MessageContent>
         </MessageRow>
     );
 }
@@ -33,37 +42,83 @@ const MessageRow = styled.div<{ $isCurrentUser: boolean }>`
   display: flex;
   justify-content: ${({ $isCurrentUser }) =>
     $isCurrentUser ? "flex-end" : "flex-start"};
+
+  align-items: flex-end;
+  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
-const MessageBubble = styled.article<{ $isCurrentUser: boolean }>`
-  max-width: 78%;
-  padding: 12px 14px;
-  border-radius: ${({ theme, $isCurrentUser }) =>
-    $isCurrentUser ? "18px 18px 4px 18px" : "18px 18px 18px 4px"};
+const Avatar = styled.div`
+  width: 38px;
+  height: 38px;
 
-  background: ${({ theme, $isCurrentUser }) =>
-    $isCurrentUser ? theme.colors.sentBubble : theme.colors.receivedBubble};
+  flex-shrink: 0;
 
-  color: ${({ $isCurrentUser }) => ($isCurrentUser ? "#ffffff" : "inherit")};
-  box-shadow: ${({ theme }) => theme.shadow.bubble};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: ${({ theme }) => theme.radius.full};
+
+  background: ${({ theme }) => theme.colors.primary};
+
+  color: white;
+
+  font-size: 14px;
+  font-weight: 700;
+`;
+
+const MessageContent = styled.div<{ $isCurrentUser: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: ${({ $isCurrentUser }) =>
+    $isCurrentUser ? "flex-end" : "flex-start"};
+
+  max-width: 75%;
 `;
 
 const MessageMeta = styled.div<{ $isCurrentUser: boolean }>`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing.md};
+  gap: ${({ theme }) => theme.spacing.sm};
+
   margin-bottom: 6px;
 
-  font-size: 12px;
+  flex-direction: ${({ $isCurrentUser }) =>
+    $isCurrentUser ? "row-reverse" : "row"};
+`;
 
-  span {
-    opacity: ${({ $isCurrentUser }) => ($isCurrentUser ? 0.8 : 0.6)};
-    font-weight: 500;
-  }
+const Author = styled.span`
+  font-size: 13px;
+  font-weight: 700;
+`;
+
+const Time = styled.span`
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.muted};
+`;
+
+const MessageBubble = styled.div<{ $isCurrentUser: boolean }>`
+  padding: 12px 16px;
+
+  border-radius: ${({ $isCurrentUser }) =>
+    $isCurrentUser
+        ? "18px 18px 4px 18px"
+        : "18px 18px 18px 4px"};
+
+  background: ${({ theme, $isCurrentUser }) =>
+    $isCurrentUser
+        ? theme.colors.sentBubble
+        : theme.colors.receivedBubble};
+
+  color: ${({ $isCurrentUser }) =>
+    $isCurrentUser ? "#fff" : "inherit"};
+
+  box-shadow: ${({ theme }) => theme.shadow.bubble};
 `;
 
 const Text = styled.p`
   font-size: 15px;
-  line-height: 1.45;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
 `;
